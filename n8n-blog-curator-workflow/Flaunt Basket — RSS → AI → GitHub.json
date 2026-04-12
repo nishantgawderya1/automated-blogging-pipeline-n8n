@@ -1,0 +1,465 @@
+{
+  "name": "Flaunt Basket — RSS → AI → GitHub",
+  "nodes": [
+    {
+      "parameters": {
+        "maxItems": 3
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -1792,
+        -240
+      ],
+      "id": "38131ce2-c288-48ff-b2b2-162c6a6cc5dc",
+      "name": "Limit1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Write a SEO optimised Blog post for on topic {{ $json.title }} in 200 words. Make sure it looks 100% genuine , like written by my company. My website name is Falunt-Basket whereever needed.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -1552,
+        -512
+      ],
+      "id": "eadd48a9-8634-4c9d-bbff-1c948b867439",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1520,
+        -224
+      ],
+      "id": "6b88fdf7-c5a0-497e-8f41-11cc08e66120",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "7N7SD9ms7URbKm4h",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"Post_Title\": \"Post Title\",\n\t\"post_Content\": \"Main Content\",\n    \"post_keywords\":\"Keywords\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -1248,
+        -224
+      ],
+      "id": "4803a8c6-1bb1-4e48-83da-f7638c0cea7d",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "content": "## 📡 RSS Feed Trigger",
+        "height": 244,
+        "width": 276
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1968,
+        -592
+      ],
+      "id": "34c7bfce-7aa4-40ea-8c40-b681d387b6e5",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## 🐙 GitHub - Commit Post JSON + 🚀 Vercel - Trigger Rebuild",
+        "height": 276,
+        "width": 440,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -928,
+        -592
+      ],
+      "id": "2a6c72fc-dda2-4043-bc34-d41b5228613b",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## ⚙️ Code — Build Post + Base64",
+        "height": 240,
+        "width": 236,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1200,
+        -592
+      ],
+      "id": "a1cdb45f-430d-4cbe-a121-29d7c0e6a416",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## 🧠 Google Gemini Chat Model",
+        "height": 240,
+        "width": 260,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1616,
+        -336
+      ],
+      "id": "bc5b2710-e4c9-47d8-8e47-22ad5b954870",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## ✅ Log — Success",
+        "height": 220,
+        "width": 312,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        -576
+      ],
+      "id": "0c5b2be4-18a4-4028-a333-14e7d3a79853",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## 🔢 Limit — Top 3 Posts\n",
+        "height": 236,
+        "width": 232,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1872,
+        -336
+      ],
+      "id": "2001f4a4-1d70-4e52-b2f4-b0194ca50027",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## 🤖 AI Agent — Gemini Rewrite",
+        "height": 236,
+        "width": 372,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1616,
+        -592
+      ],
+      "id": "f46e60a0-25ec-4f08-b1c5-784ef49a77e6",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "feedUrl": "https://www.jewelleryfocus.co.uk/feed"
+      },
+      "type": "n8n-nodes-base.rssFeedReadTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1872,
+        -512
+      ],
+      "id": "fb3e49b8-ac04-4ee2-9389-f340a13c7d86",
+      "name": "RSS Feed Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get AI output\nconst ai = $input.first().json;\n\n// Get original RSS item — match exact node name on your canvas\nconst rss = $('Limit1').first().json;\n\n// 1. Title\nconst title = (ai.title || rss.title || 'untitled').trim();\n\n// 2. Slug\nconst slug = title\n  .toLowerCase()\n  .replace(/[^a-z0-9\\s-]/g, '')\n  .trim()\n  .replace(/\\s+/g, '-')\n  .replace(/-+/g, '-')\n  .slice(0, 60)\n  .replace(/-$/, '');\n\n// 3. Extract image\nlet image = '';\nconst html = rss['content:encoded'] || '';\nconst imgTag = html.match(/<img[^>]+src=[\"']([^\"']+)[\"']/i);\nif (imgTag) image = imgTag[1];\n\nif (!image) {\n  const urlMatch = html.match(/https?:\\/\\/[^\\s\"'<>]+\\.(?:jpg|jpeg|png|webp|avif)/i);\n  if (urlMatch) image = urlMatch[0];\n}\n\nif (!image && rss.enclosure && rss.enclosure.url) {\n  image = rss.enclosure.url;\n}\n\n// 4. Build post object\nconst post = {\n  id: Date.now(),\n  slug,\n  title,\n  description: (ai.description || '').slice(0, 160),\n  image,\n  category: ai.category || 'FINE JEWELLERY',\n  date: ai.date || new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),\n  featured: false,\n  content: ai.content || '',\n  keywords: ai.keywords || '',\n  sourceUrl: rss.link || '',\n  publishedAt: rss.pubDate || new Date().toISOString()\n};\n\n// 5. Base64 encode\nconst encoded = Buffer.from(JSON.stringify(post, null, 2)).toString('base64');\nconst commitMessage = `feat: add post \"${slug}\"`;\n\nreturn [\n  {\n    json: {\n      slug,\n      encoded,\n      commitMessage,\n      post\n    }\n  }\n];"
+      },
+      "id": "b44426c8-8531-4dcd-bd2b-bb898ba95adb",
+      "name": "Code — Build Post + Base",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1104,
+        -496
+      ],
+      "notes": "Generates slug, extracts image from RSS HTML, assembles final JSON, base64 encodes for GitHub API."
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "https://api.github.com/repos/nishantgawderya1/flaunt-basket/contents/src/data/posts/{{ $json.slug }}.json",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            },
+            {
+              "name": "X-GitHub-Api-Version",
+              "value": "2022-11-28"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "={{ $json.commitMessage }}"
+            },
+            {
+              "name": "content",
+              "value": "={{ $json.encoded }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8ee97ba3-b46e-409f-9da2-b1bd3f9503b6",
+      "name": "GitHub — Commit Post JSON1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -848,
+        -496
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "Xj74MEzoYuWoGSej",
+          "name": "GitHub account"
+        }
+      },
+      "notes": "PUT to GitHub API. Replace YOUR_GITHUB_USERNAME. Use a Fine-grained PAT with Contents: Read & Write scope on flaunt-basket repo only. Store as Header Auth credential in n8n."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.github.com/repos/nishantgawderya1/flaunt-basket/dispatches",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            },
+            {
+              "name": "X-GitHub-Api-Version",
+              "value": "2022-11-28"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "event_type",
+              "value": "n8n-post-published"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6d38bf0c-ece5-4c97-b581-68e88ab866e3",
+      "name": "Vercel — Trigger Rebuild1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -640,
+        -496
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "Xj74MEzoYuWoGSej",
+          "name": "GitHub account"
+        }
+      },
+      "notes": "Optional: triggers a GitHub Actions workflow_dispatch which then calls Vercel deploy hook. Replace with direct Vercel deploy hook URL if preferred: POST to https://api.vercel.com/v1/integrations/deploy/YOUR_HOOK_ID"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ── Success log ──\nconst post = $input.first().json;\nconsole.log(`✅ Published: ${post.slug || 'unknown'}`);\nreturn $input.all();"
+      },
+      "id": "775021d1-ec1f-4f67-98b2-5085dc7fdf3c",
+      "name": "Log — Success1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -368,
+        -512
+      ],
+      "notes": "Logs successful publish. Extend this to send a Slack/email notification if needed."
+    },
+    {
+      "parameters": {
+        "content": "## 🔍 Structured Output Parser",
+        "height": 240,
+        "width": 228,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1328,
+        -336
+      ],
+      "id": "2d5ed77b-2081-4176-a3f9-acbb80920f28",
+      "name": "Sticky Note7"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Limit1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Feed Trigger": {
+      "main": [
+        [
+          {
+            "node": "Limit1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code — Build Post + Base": {
+      "main": [
+        [
+          {
+            "node": "GitHub — Commit Post JSON1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub — Commit Post JSON1": {
+      "main": [
+        [
+          {
+            "node": "Vercel — Trigger Rebuild1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vercel — Trigger Rebuild1": {
+      "main": [
+        [
+          {
+            "node": "Log — Success1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code — Build Post + Base",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "9e6b856c-e588-46dc-a551-fd1d055826b8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "40877e90bde6824ad1eece4ee6378e3d8104b01cf28437c73713ccfcf469e838"
+  },
+  "id": "IXeMmiXmDxa58I12",
+  "tags": [
+    {
+      "updatedAt": "2026-04-10T10:08:41.913Z",
+      "createdAt": "2026-04-10T10:08:41.913Z",
+      "id": "8FEfHgfs6dmD3Ixr",
+      "name": "YouTube Tutorial"
+    },
+    {
+      "name": "flaunt-basket",
+      "id": "PJH4sE2wlMjNJuZw",
+      "updatedAt": "2026-04-12T06:27:02.682Z",
+      "createdAt": "2026-04-12T06:27:02.682Z"
+    },
+    {
+      "name": "blog",
+      "id": "lEKlluVCCmzUP8hd",
+      "updatedAt": "2026-04-12T06:27:02.713Z",
+      "createdAt": "2026-04-12T06:27:02.713Z"
+    },
+    {
+      "name": "automation",
+      "id": "rqCFY4rwwpdxzZBJ",
+      "updatedAt": "2026-04-12T06:27:02.658Z",
+      "createdAt": "2026-04-12T06:27:02.658Z"
+    }
+  ]
+}
