@@ -1,9 +1,10 @@
 import { useParams, Link } from 'react-router-dom';
-import { articles } from '../data/articles';
+import { getArticleBySlug, articles } from '../hooks/useArticles';
+import ArticleCard from '../components/ArticleCard';
 
 export default function ArticlePage() {
   const { slug } = useParams();
-  const article = articles.find((a) => a.slug === slug);
+  const article = getArticleBySlug(slug);
 
   if (!article) {
     return (
@@ -21,17 +22,34 @@ export default function ArticlePage() {
     );
   }
 
+  // Related posts — same category, exclude current, max 3
+  const related = articles
+    .filter((a) => a.category === article.category && a.slug !== slug)
+    .slice(0, 3);
+
+  // Split content on double newlines into paragraphs
+  const paragraphs = article.content
+    ? article.content.split('\n\n').filter(Boolean)
+    : [];
+
+  // Split keywords into tags
+  const keywords = article.keywords
+    ? article.keywords.split(',').map((k) => k.trim()).filter(Boolean)
+    : [];
+
   return (
     <main className="bg-white" id="article-page">
       {/* Hero image */}
-      <div className="w-full aspect-[16/7] overflow-hidden">
-        <img
-          src={article.image}
-          alt={article.title}
-          className="w-full h-full object-cover object-center"
-          loading="eager"
-        />
-      </div>
+      {article.image && (
+        <div className="w-full aspect-[16/7] overflow-hidden">
+          <img
+            src={article.image}
+            alt={article.title}
+            className="w-full h-full object-cover object-center"
+            loading="eager"
+          />
+        </div>
+      )}
 
       {/* Article content */}
       <article className="max-w-[760px] mx-auto px-6 lg:px-0 py-14">
@@ -51,42 +69,55 @@ export default function ArticlePage() {
           {article.title}
         </h1>
 
-        {/* Dek / description */}
-        <p className="font-editorial italic text-[#555555] text-xl md:text-2xl leading-relaxed mb-10 border-l-2 border-[#e0e0e0] pl-5">
-          {article.description}
-        </p>
+        {/* Description / dek */}
+        {article.description && (
+          <p className="font-editorial italic text-[#555555] text-xl md:text-2xl leading-relaxed mb-10 border-l-2 border-[#e0e0e0] pl-5">
+            {article.description}
+          </p>
+        )}
 
         <div className="h-px bg-[#e0e0e0] mb-10" />
 
-        {/* Body copy — simulated editorial text */}
+        {/* Body copy */}
         <div className="font-editorial text-[1.1rem] leading-[1.9] text-[#222222] space-y-6">
-          <p>
-            The history of fine jewellery is a chronicle of human desire — our compulsion to adorn, to signal status, to mark love, and to preserve memory in metal and stone. Few pieces capture this impulse as completely as the subject of our story today.
-          </p>
-          <p>
-            From the ateliers of the great maisons to the independent makers reshaping the landscape, the world of jewellery has rarely felt so alive. New materials sit alongside ancient techniques; digital design tools collaborate with hands that have shaped metal for decades.
-          </p>
-          <h2 className="font-editorial text-2xl font-bold uppercase tracking-[0.04em] text-[#111111] pt-4">
-            Craftsmanship Beyond Compare
-          </h2>
-          <p>
-            What separates truly great jewellery from merely beautiful jewellery is the depth of intention behind every decision. The choice of stone, the direction of the setting, the finish on the back of a piece that will never be seen — these are the marks of a maker who understands that excellence is not a performance for an audience, but a private conversation between craftsperson and material.
-          </p>
-          <p>
-            In an era of fast fashion and disposable luxury, the enduring appeal of a meticulously crafted piece feels almost radical. To own a jewel of true quality is to participate in a kind of resistance — a refusal to accept the temporary, the convenient, the merely good enough.
-          </p>
-          <h2 className="font-editorial text-2xl font-bold uppercase tracking-[0.04em] text-[#111111] pt-4">
-            The Modern Collector
-          </h2>
-          <p>
-            Today's collector is more informed, more adventurous, and more personally expressive than any generation before. They research provenance, they ask about sustainability, they commission bespoke pieces that tell their own stories. The question is no longer which great house to patronise — it is which vision resonates most deeply with who you are, and who you intend to become.
-          </p>
-          <p>
-            This editorial journal exists to guide that search — not with the language of salesmanship, but with the vocabulary of genuine appreciation for what is rare, considered, and beautifully made.
-          </p>
+          {paragraphs.length > 0 ? (
+            paragraphs.map((para, i) => <p key={i}>{para}</p>)
+          ) : (
+            // Fallback placeholder if content field is empty (e.g. n8n test post)
+            <p className="text-[#888888] italic">Content coming soon.</p>
+          )}
         </div>
 
+        {/* Keywords / tags */}
+        {keywords.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-12">
+            {keywords.map((k) => (
+              <span
+                key={k}
+                className="font-sans-ui text-[9px] uppercase tracking-[0.14em] text-[#888888] border border-[#e0e0e0] px-3 py-1"
+              >
+                {k}
+              </span>
+            ))}
+          </div>
+        )}
+
         <div className="h-px bg-[#e0e0e0] mt-12 mb-8" />
+
+        {/* Source link */}
+        {article.sourceUrl && (
+          <p className="font-sans-ui text-[10px] uppercase tracking-[0.12em] text-[#aaaaaa] mb-6">
+            Source:{' '}
+            <a
+              href={article.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#111111] transition-colors border-b border-[#cccccc]"
+            >
+              Original article ↗
+            </a>
+          </p>
+        )}
 
         {/* Back link */}
         <Link
@@ -97,6 +128,23 @@ export default function ArticlePage() {
           ← All Watches &amp; Jewellery
         </Link>
       </article>
+
+      {/* Related articles */}
+      {related.length > 0 && (
+        <section className="max-w-[1400px] mx-auto px-6 lg:px-10 pb-16">
+          <div className="flex items-center gap-4 mb-10">
+            <span className="font-sans-ui text-[10px] uppercase tracking-[0.18em] text-[#888888]">
+              Related Stories
+            </span>
+            <div className="flex-1 h-px bg-[#e0e0e0]" />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {related.map((post) => (
+              <ArticleCard key={post.slug} article={post} />
+            ))}
+          </div>
+        </section>
+      )}
     </main>
   );
 }
